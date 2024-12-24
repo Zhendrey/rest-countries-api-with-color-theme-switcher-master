@@ -1,0 +1,41 @@
+const asianCountries = countryData.filter((country, index)=>{
+    return country.region === 'Asia';
+})
+const europeanCountries = countryData.filter((country, index)=>{
+    return country.region === 'Europe';
+})
+const americanCountries = countryData.filter((country, index)=>{
+    return country.region === 'Americas';
+})
+const africanCountries = countryData.filter((country, index)=>{
+    return country.region === 'Africa';
+})
+const oceaniaCountries = countryData.filter((country, index)=>{
+    return country.region === 'Oceania';
+})
+const polar = countryData.filter((country, index)=>{
+    return country.region === 'Polars';
+})
+const antarcticCountries = countryData.filter((country, index)=>{
+    return country.region === 'Antractica';
+})
+const antarctic = countryData.filter((country, index)=>{
+    return country.region === 'Antarctic';
+})
+
+if(element.population === 0){
+                    element.population = 'Unknown';
+                }
+                createCountry(
+                    countryContainer, 
+                    element.flag, 
+                    element.name, 
+                    element.population.toLocaleString('en-US', {maximumFractionDigits: 0}), 
+                    element.region, 
+                    element.capital
+                );
+}
+
+   const currenciesString = currencies.reduce((storage, element) => {
+        return storage + `${element} `
+    }, '');
