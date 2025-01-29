@@ -2,8 +2,7 @@
 import getCountryData from "./home.js";
 
 //!DATA SETUP
-const data = await getCountryData();
-data.sort((a, b) => b.population - a.population);
+const data = await getCountryData();
 const selectedCountry = Number(localStorage.getItem('country'));
 console.log(data[selectedCountry]);
 
