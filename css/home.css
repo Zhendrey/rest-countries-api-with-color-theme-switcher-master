@@ -1,5 +1,36 @@
 /* Fonts */
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,600,800&display=swap");
+@font-face {
+  font-family: "icomoon";
+  src: url("../fonts/icomoon.eot?n5lzjg");
+  src: url("../fonts/icomoon.eot?n5lzjg#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?n5lzjg") format("truetype"), url("../fonts/icomoon.woff?n5lzjg") format("woff"), url("../fonts/icomoon.svg?n5lzjg#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+[class*=icon] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sun-regular:before {
+  font-family: "icomoon";
+  content: "\e901";
+}
+
+.icon-moon-regular:before {
+  content: "\e900";
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -297,6 +328,25 @@ body {
   background-color: var(--gray-100);
 }
 
+.error {
+  color: red;
+  text-align: center;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+p.error {
+  line-height: 1.4;
+}
+
+pre.error {
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.4;
+  color: red;
+  text-align: center;
+}
+
 .country.visible {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -310,6 +360,9 @@ body {
 }
 
 /* main */
+.page {
+  position: relative;
+}
 .page__container {
   gap: 2.4375rem;
 }
@@ -378,6 +431,29 @@ body {
      -moz-column-gap: 4rem;
           column-gap: 4rem;
   row-gap: 2rem;
+}
+
+.countries.loading,
+.countries.failed {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1.5625rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 5px;
+}
+
+.countries.failed {
+  color: var(--red-500);
 }
 
 .country {

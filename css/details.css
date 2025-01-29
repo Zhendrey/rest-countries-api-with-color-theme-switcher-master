@@ -1,5 +1,36 @@
 /* Fonts */
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,600,800&display=swap");
+@font-face {
+  font-family: "icomoon";
+  src: url("../fonts/icomoon.eot?n5lzjg");
+  src: url("../fonts/icomoon.eot?n5lzjg#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?n5lzjg") format("truetype"), url("../fonts/icomoon.woff?n5lzjg") format("woff"), url("../fonts/icomoon.svg?n5lzjg#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+[class*=icon] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sun-regular:before {
+  font-family: "icomoon";
+  content: "\e901";
+}
+
+.icon-moon-regular:before {
+  content: "\e900";
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -296,6 +327,11 @@ option:focus {
   color: red;
   text-decoration: underline;
   font-weight: var(--font-600);
+}
+
+.loading {
+  font-size: 1.125rem;
+  text-align: center;
 }
 
 .page__container {

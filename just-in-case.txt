@@ -39,3 +39,12 @@ if(element.population === 0){
    const currenciesString = currencies.reduce((storage, element) => {
         return storage + `${element} `
     }, '');
+
+     // if(countryRegion.toLowerCase() !== selectedOption){
+                    //     country.remove();
+                    // }else{
+                    //     countryContainer.append(archivedCountry);
+                    // }
+                    // if(selectedOption === 'all'){
+                    //     countryContainer.append(archivedCountry);
+                    // }

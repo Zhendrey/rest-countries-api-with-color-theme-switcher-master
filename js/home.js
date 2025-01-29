@@ -3,6 +3,17 @@ export default async function getCountryData(){
     const countryData = await fetch('../data.json');
     return await countryData.json();
 }
+//DOM ELEMENTS AND VARIABLES
+const body = document.body;
+const darkModeBtn = document.querySelector(".header__button");
+const searchIcon = document.querySelector('.search__icon');
+const searchInput = document.querySelector('.search__input');
+const searchSelect = document.querySelector('.search__select');
+const selectOptions = document.querySelectorAll("option[value]");
+const buttonIcon = document.querySelector('i');
+
+const icons = ['icon-sun-regular', 'icon-moon-regular'];
+
 //!FUNCTIONS
 function createCountry(container, flag, name, population, region, capital, id){
     //Creating the elements
@@ -69,9 +80,13 @@ function activateDarkMode(body, darkModeBtn){
     darkModeBtn.addEventListener("click", function(e){
         body.classList.toggle("dark-mode");
         sessionStorage.setItem("dark-theme", true);
-        btnText.textContent = 'Light Mode';
+        btnText.textContent = 'Dark Mode';
+        buttonIcon.classList.remove(icons[0]);
+        buttonIcon.classList.add(icons[1]);
         if(!body.classList.contains("dark-mode")){
-            btnText.textContent = 'Dark Mode'
+            buttonIcon.classList.remove(icons[1]);
+            buttonIcon.classList.add(icons[0]);
+            btnText.textContent = 'Light Mode'
             sessionStorage.removeItem("dark-theme")
         }
     })
@@ -80,22 +95,26 @@ function indentifyTheme(body, darkModeBtn){
     const isDarkMode = sessionStorage.getItem("dark-theme");
     const btnText = darkModeBtn.querySelector("span");
     console.log(Boolean(isDarkMode));
+    console.log(buttonIcon)
     if(!isDarkMode){
+        buttonIcon.classList.remove(icons[1]);
+        buttonIcon.classList.add(icons[0]);
         body.classList.remove("dark-mode")
     }else{
-        btnText.textContent = 'Light Mode'
+        buttonIcon.classList.remove(icons[0]);
+        buttonIcon.classList.add(icons[1]);
+        btnText.textContent = 'Dark Mode'
         body.classList.add("dark-mode")
     }
 }
+function throwError(container, message){
+    const error = document.createElement('p');
+    error.classList.add('error');
+    error.textContent = message;
+    container.append(error);
+}
 
 //!MAIN CODE
-//DOM ELEMENTS
-const body = document.body;
-const darkModeBtn = document.querySelector(".header__button");
-const searchIcon = document.querySelector('.search__icon');
-const searchInput = document.querySelector('.search__input');
-const searchSelect = document.querySelector('.search__select');
-const selectOptions = document.querySelectorAll("option[value]");
 
 //DARK THEME EXECUTION
 indentifyTheme(body, darkModeBtn);
@@ -123,9 +142,8 @@ console.log(intersectionObserver);
 const countryContainer = document.querySelector('.countries');
 window.addEventListener("load", () => {
     xhr.onload = function() {
-        if (xhr.status === 200) {
+        try {
             const countryData = JSON.parse(xhr.responseText);
-            countryData.sort((a, b) => b.population - a.population);
             countryData.forEach((country, id)=>{
                 if(country.population === 0){
                     country.population = 'Unknown';
@@ -147,17 +165,14 @@ window.addEventListener("load", () => {
             searchSelect.addEventListener("change", function(e){
                 const selectedOption = e.target.value;
                 countryElements.forEach(country=>{
+                    const archivedCountry = country;
                     const countryRegion = country.querySelector('.country__region .info_value').textContent;
-                    if(countryRegion.toLowerCase() !== selectedOption){
-                        country.style.display = 'none';
-                        country.classList.remove('visible');
+                    
+                    if(countryRegion.toLowerCase() == selectedOption
+                        || selectedOption == 'all'){
+                            countryContainer.append(archivedCountry);
                     }else{
-                        country.style.display = 'flex';
-                        country.classList.add('visible');
-                    }
-                    if(selectedOption === 'all'){
-                        country.style.display = 'flex';
-                        country.classList.add('visible');
+                        country.remove()
                     }
                 })
             })
@@ -165,17 +180,19 @@ window.addEventListener("load", () => {
             searchIcon.addEventListener('click', function(e){
                 inputSearch.focus();
             })
+            let count = 0;
             searchInput.addEventListener('input', function(e){
                 const searchValue = e.target.value;
-                const visibleCountries = document.querySelectorAll(".visible");
-                console.log(visibleCountries);
-                const countries = [...countryElements].map((country, index)=>{
+                const countries = [...document.querySelectorAll(".country")].map(country=>{
                     return country.querySelector('.country__name').textContent;
                 })
-                const notMatched = countries.filter((country, index)=>{
+                const matched = countries.filter(country=>{
+                    return country.toLowerCase().includes(searchValue.toLowerCase());
+                })
+                const notMatched = countries.filter(country=>{
                     return !country.toLowerCase().includes(searchValue.toLowerCase());
                 })
-                countryElements.forEach((country, index)=>{
+                document.querySelectorAll(".country").forEach(country=>{
                     const countryName = country.querySelector('.country__name').textContent;
                     if(notMatched.includes(countryName)){
                         country.style.display = 'none';
@@ -185,13 +202,36 @@ window.addEventListener("load", () => {
                         country.classList.add('visible');
                     }
                 })
+                console.log(matched);
+                if(!matched.length){
+                    count++;
+                    if(count <= 1) throwError(document.querySelector(".page"), 'No matches found');
+                }else{
+                    count = 0;
+                    const error = document.querySelector("p.error");
+                    if(error){
+                        error.remove();
+                    }
+                }
             })
             countryContainer.addEventListener("click", function(e){
                 const targetElem = e.target.closest(".country");
                 localStorage.setItem('country', Number(targetElem.id))
             })
-        }else{
-            console.error('Error');
+        }catch(err){
+            document.querySelector(".countries").classList.add('failed')
+            document.querySelector(".countries").insertAdjacentHTML("beforeend",
+                `
+                <div>
+                <p class='error'>Oops! Seems like an error occured in our service! We are appologizing for this inconvinience and promise to return soon. 😢</p>
+                <pre class='error'>${err}</pre>
+                </div>
+                `
+            )
+            console.error(err);
+        }finally{
+            document.querySelector(".countries").classList.remove('loading');
+            document.querySelector(".loading").remove();
         }
     }
     xhr.send();
